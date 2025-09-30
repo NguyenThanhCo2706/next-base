@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Đăng Ký Khách Hàng</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            box-sizing: border-box;
+        }
+        .step-indicator {
+            transition: all 0.3s ease;
+        }
+        .step-indicator.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .step-indicator.completed {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+        .modal-backdrop {
+            backdrop-filter: blur(5px);
+        }
+        .form-slide {
+            opacity: 0;
+            transform: translateX(20px);
+            transition: all 0.3s ease;
+        }
+        .form-slide.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-purple-100 via-blue-50 to-indigo-100 min-h-screen flex items-center justify-center p-4">
+    
+    <!-- Nút mở modal -->
+    <button onclick="openModal()" class="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-4 px-8 rounded-xl shadow-lg transform hover:scale-105 transition-all duration-200">
+        Đăng Ký Thông Tin Khách Hàng
+    </button>
+
+    <!-- Modal -->
+    <div id="registrationModal" class="fixed inset-0 bg-black bg-opacity-50 modal-backdrop hidden items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden">
+            
+            <!-- Header -->
+            <div class="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-6">
+                <div class="flex justify-between items-center">
+                    <h2 class="text-2xl font-bold">Đăng Ký Thông Tin</h2>
+                    <button onclick="closeModal()" class="text-white hover:text-gray-200 text-2xl font-bold">&times;</button>
+                </div>
+                
+                <!-- Progress Bar -->
+                <div class="mt-4">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-sm">Bước <span id="currentStepText">1</span> / 5</span>
+                        <span class="text-sm" id="progressPercent">20%</span>
+                    </div>
+                    <div class="w-full bg-white bg-opacity-30 rounded-full h-2">
+                        <div id="progressBar" class="bg-white h-2 rounded-full transition-all duration-300" style="width: 20%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step Indicators -->
+            <div class="flex justify-center space-x-4 p-4 bg-gray-50">
+                <div class="step-indicator active w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm">1</div>
+                <div class="step-indicator w-10 h-10 rounded-full flex items-center justify-center bg-gray-300 text-gray-600 font-bold text-sm">2</div>
+                <div class="step-indicator w-10 h-10 rounded-full flex items-center justify-center bg-gray-300 text-gray-600 font-bold text-sm">3</div>
+                <div class="step-indicator w-10 h-10 rounded-full flex items-center justify-center bg-gray-300 text-gray-600 font-bold text-sm">4</div>
+                <div class="step-indicator w-10 h-10 rounded-full flex items-center justify-center bg-gray-300 text-gray-600 font-bold text-sm">5</div>
+            </div>
+
+            <!-- Form Content -->
+            <div class="p-6 max-h-96 overflow-y-auto">
+                <form id="registrationForm">
+                    
+                    <!-- Bước 1: Thông tin cá nhân -->
+                    <div class="form-slide active" id="step1">
+                        <h3 class="text-xl font-semibold mb-4 text-gray-800">Thông Tin Cá Nhân</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Họ và tên *</label>
+                                <input type="text" name="fullName" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Ngày sinh *</label>
+                                    <input type="date" name="birthDate" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Giới tính *</label>
+                                    <select name="gender" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                        <option value="">Chọn giới tính</option>
+                                        <option value="male">Nam</option>
+                                        <option value="female">Nữ</option>
+                                        <option value="other">Khác</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bước 2: Thông tin liên hệ -->
+                    <div class="form-slide" id="step2">
+                        <h3 class="text-xl font-semibold mb-4 text-gray-800">Thông Tin Liên Hệ</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Số điện thoại *</label>
+                                <input type="tel" name="phone" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Email *</label>
+                                <input type="email" name="email" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Zalo/Telegram</label>
+                                <input type="text" name="socialContact" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bước 3: Địa chỉ -->
+                    <div class="form-slide" id="step3">
+                        <h3 class="text-xl font-semibold mb-4 text-gray-800">Địa Chỉ</h3>
+                        <div class="space-y-4">
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Tỉnh/Thành phố *</label>
+                                    <select name="province" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                        <option value="">Chọn tỉnh/thành</option>
+                                        <option value="hanoi">Hà Nội</option>
+                                        <option value="hcm">TP. Hồ Chí Minh</option>
+                                        <option value="danang">Đà Nẵng</option>
+                                        <option value="haiphong">Hải Phòng</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Quận/Huyện *</label>
+                                    <select name="district" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                        <option value="">Chọn quận/huyện</option>
+                                        <option value="district1">Quận 1</option>
+                                        <option value="district2">Quận 2</option>
+                                        <option value="district3">Quận 3</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Địa chỉ chi tiết *</label>
+                                <textarea name="address" required rows="3" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Số nhà, tên đường, phường/xã..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bước 4: Thông tin nghề nghiệp -->
+                    <div class="form-slide" id="step4">
+                        <h3 class="text-xl font-semibold mb-4 text-gray-800">Thông Tin Nghề Nghiệp</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Nghề nghiệp *</label>
+                                <select name="occupation" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                    <option value="">Chọn nghề nghiệp</option>
+                                    <option value="student">Học sinh/Sinh viên</option>
+                                    <option value="employee">Nhân viên</option>
+                                    <option value="manager">Quản lý</option>
+                                    <option value="business">Kinh doanh</option>
+                                    <option value="freelancer">Freelancer</option>
+                                    <option value="other">Khác</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Công ty/Tổ chức</label>
+                                <input type="text" name="company" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Thu nhập hàng tháng</label>
+                                <select name="income" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                    <option value="">Chọn mức thu nhập</option>
+                                    <option value="under5">Dưới 5 triệu</option>
+                                    <option value="5to10">5-10 triệu</option>
+                                    <option value="10to20">10-20 triệu</option>
+                                    <option value="20to50">20-50 triệu</option>
+                                    <option value="over50">Trên 50 triệu</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bước 5: Xác nhận và ghi chú -->
+                    <div class="form-slide" id="step5">
+                        <h3 class="text-xl font-semibold mb-4 text-gray-800">Xác Nhận Thông Tin</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Ghi chú thêm</label>
+                                <textarea name="notes" rows="4" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Thông tin bổ sung hoặc yêu cầu đặc biệt..."></textarea>
+                            </div>
+                            <div class="bg-blue-50 p-4 rounded-lg">
+                                <div class="flex items-start space-x-3">
+                                    <input type="checkbox" name="agreement" required class="mt-1 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                                    <label class="text-sm text-gray-700">
+                                        Tôi đồng ý với <a href="#" class="text-blue-600 hover:underline">điều khoản sử dụng</a> và <a href="#" class="text-blue-600 hover:underline">chính sách bảo mật</a> của công ty. Tôi xác nhận rằng tất cả thông tin đã cung cấp là chính xác và đầy đủ.
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+
+            <!-- Footer với các nút điều hướng -->
+            <div class="bg-gray-50 px-6 py-4 flex justify-between items-center">
+                <button type="button" id="prevBtn" onclick="previousStep()" class="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-100 transition-colors duration-200 hidden">
+                    Quay lại
+                </button>
+                <div class="flex space-x-3">
+                    <button type="button" onclick="closeModal()" class="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-100 transition-colors duration-200">
+                        Hủy
+                    </button>
+                    <button type="button" id="nextBtn" onclick="nextStep()" class="px-6 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-200">
+                        Tiếp theo
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Thông báo thành công -->
+    <div id="successMessage" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-2xl shadow-2xl p-8 max-w-md mx-4 text-center">
+            <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-800 mb-2">Đăng ký thành công!</h3>
+            <p class="text-gray-600 mb-6">Cảm ơn bạn đã đăng ký. Chúng tôi sẽ liên hệ với bạn trong thời gian sớm nhất.</p>
+            <button onclick="closeSuccessMessage()" class="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-200">
+                Đóng
+            </button>
+        </div>
+    </div>
+
+    <script>
+        let currentStep = 1;
+        const totalSteps = 5;
+
+        function openModal() {
+            document.getElementById('registrationModal').classList.remove('hidden');
+            document.getElementById('registrationModal').classList.add('flex');
+        }
+
+        function closeModal() {
+            document.getElementById('registrationModal').classList.add('hidden');
+            document.getElementById('registrationModal').classList.remove('flex');
+            resetForm();
+        }
+
+        function closeSuccessMessage() {
+            document.getElementById('successMessage').classList.add('hidden');
+            document.getElementById('successMessage').classList.remove('flex');
+        }
+
+        function resetForm() {
+            currentStep = 1;
+            document.getElementById('registrationForm').reset();
+            updateStepDisplay();
+            updateProgressBar();
+            updateStepIndicators();
+        }
+
+        function nextStep() {
+            if (validateCurrentStep()) {
+                if (currentStep < totalSteps) {
+                    currentStep++;
+                    updateStepDisplay();
+                    updateProgressBar();
+                    updateStepIndicators();
+                } else {
+                    submitForm();
+                }
+            }
+        }
+
+        function previousStep() {
+            if (currentStep > 1) {
+                currentStep--;
+                updateStepDisplay();
+                updateProgressBar();
+                updateStepIndicators();
+            }
+        }
+
+        function updateStepDisplay() {
+            // Ẩn tất cả các bước
+            for (let i = 1; i <= totalSteps; i++) {
+                const step = document.getElementById(`step${i}`);
+                step.classList.remove('active');
+            }
+            
+            // Hiển thị bước hiện tại
+            document.getElementById(`step${currentStep}`).classList.add('active');
+            
+            // Cập nhật text
+            document.getElementById('currentStepText').textContent = currentStep;
+            
+            // Cập nhật nút
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            
+            if (currentStep === 1) {
+                prevBtn.classList.add('hidden');
+            } else {
+                prevBtn.classList.remove('hidden');
+            }
+            
+            if (currentStep === totalSteps) {
+                nextBtn.textContent = 'Hoàn thành';
+            } else {
+                nextBtn.textContent = 'Tiếp theo';
+            }
+        }
+
+        function updateProgressBar() {
+            const progress = (currentStep / totalSteps) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+            document.getElementById('progressPercent').textContent = Math.round(progress) + '%';
+        }
+
+        function updateStepIndicators() {
+            const indicators = document.querySelectorAll('.step-indicator');
+            indicators.forEach((indicator, index) => {
+                const stepNumber = index + 1;
+                indicator.classList.remove('active', 'completed');
+                
+                if (stepNumber < currentStep) {
+                    indicator.classList.add('completed');
+                } else if (stepNumber === currentStep) {
+                    indicator.classList.add('active');
+                }
+            });
+        }
+
+        function validateCurrentStep() {
+            const currentStepElement = document.getElementById(`step${currentStep}`);
+            const requiredFields = currentStepElement.querySelectorAll('[required]');
+            
+            for (let field of requiredFields) {
+                if (!field.value.trim()) {
+                    field.focus();
+                    field.classList.add('border-red-500');
+                    setTimeout(() => {
+                        field.classList.remove('border-red-500');
+                    }, 3000);
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        function submitForm() {
+            const formData = new FormData(document.getElementById('registrationForm'));
+            const data = Object.fromEntries(formData);
+            
+            // Hiển thị thông báo thành công
+            closeModal();
+            document.getElementById('successMessage').classList.remove('hidden');
+            document.getElementById('successMessage').classList.add('flex');
+            
+            // Log dữ liệu (trong thực tế sẽ gửi lên server)
+            console.log('Dữ liệu đăng ký:', data);
+        }
+
+        // Khởi tạo
+        updateStepDisplay();
+        updateProgressBar();
+        updateStepIndicators();
+    </script>
+
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98505324544b72ce',t:'MTc1ODg2NDE1OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

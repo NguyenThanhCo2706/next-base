@@ -1,0 +1,26 @@
+.step-indicator {
+  transition: all 0.3s ease;
+}
+
+.step-indicator.active {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.step-indicator.completed {
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+}
+
+.modal-backdrop {
+  backdrop-filter: blur(5px);
+}
+
+// .form-slide {
+//   opacity: 0;
+//   transform: translateX(20px);
+//   transition: all 0.3s ease;
+// }
+
+// .form-slide.active {
+//   opacity: 1;
+//   transform: translateX(0);
+// }

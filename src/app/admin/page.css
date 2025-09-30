@@ -1,0 +1,77 @@
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.bg-app {
+  background: radial-gradient(
+      1200px 600px at 10% -10%,
+      rgba(29, 134, 255, 0.14),
+      transparent 60%
+    ),
+    radial-gradient(
+      1000px 600px at 100% 0%,
+      rgba(34, 211, 163, 0.1),
+      transparent 60%
+    ),
+    linear-gradient(180deg, #0b1220 0%, #0f172a 100%);
+  background-size: 200% 200%;
+  animation: gradientShift 30s ease infinite;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.scroll-soft::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+
+.scroll-soft::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 9999px;
+}
+
+.glass {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.06),
+    rgba(255, 255, 255, 0.03)
+  );
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.25);
+}
+
+.table-grid {
+  border-collapse: separate;
+  border-spacing: 0 8px;
+}
+
+.table-row {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.modal-show {
+  display: flex;
+}
+
+.modal-hide {
+  display: none;
+}
